@@ -505,12 +505,17 @@ const renderCards = () => {
     card.style.transitionDelay = `${index * 20}ms`;
 
     // Spotlight effect tracking
+    let spotlightRaf = null;
     card.onmousemove = (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty("--x", `${x}px`);
-      card.style.setProperty("--y", `${y}px`);
+      if (spotlightRaf) return;
+      spotlightRaf = requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty("--x", `${x}px`);
+        card.style.setProperty("--y", `${y}px`);
+        spotlightRaf = null;
+      });
     };
 
     // Material Design Ripple Effect on click
@@ -536,6 +541,10 @@ const renderCards = () => {
 
     card.onmouseleave = () => {
       card.classList.remove('elevated');
+      if (spotlightRaf) {
+        cancelAnimationFrame(spotlightRaf);
+        spotlightRaf = null;
+      }
       card.style.setProperty("--x", "50%");
       card.style.setProperty("--y", "50%");
     };
@@ -652,27 +661,53 @@ const attachEvents = () => {
 
   // Evasive Exit Button Logic
   if (exitBtn) {
-    document.addEventListener("mousemove", (e) => {
-      const rect = exitBtn.getBoundingClientRect();
-      const buttonCenterX = rect.left + rect.width / 2;
-      const buttonCenterY = rect.top + rect.height / 2;
+    let baseX, baseY;
 
-      const distanceX = e.clientX - buttonCenterX;
-      const distanceY = e.clientY - buttonCenterY;
+    function updateBasePosition() {
+      const rect = exitBtn.getBoundingClientRect();
+      // We calculate the base center relative to current scroll + transform
+      // But since it's on a splash overlay that doesn't scroll yet, 
+      // simple rect.left + rect.width/2 is fine. 
+      // We subtract current transform to get the true '0,0' center.
+      const style = window.getComputedStyle(exitBtn);
+      const matrix = new WebKitCSSMatrix(style.transform);
+      baseX = rect.left + rect.width / 2 - matrix.m41;
+      baseY = rect.top + rect.height / 2 - matrix.m42;
+    }
+
+    // Initial capture (wait for a frame to ensure layout)
+    requestAnimationFrame(updateBasePosition);
+    window.addEventListener('resize', updateBasePosition);
+
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function loop() {
+      if (!baseX || !baseY) {
+        requestAnimationFrame(loop);
+        return;
+      }
+
+      const distanceX = mouseX - baseX;
+      const distanceY = mouseY - baseY;
       const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-      const repelRadius = 150; // Distance at which button starts moving
+      const repelRadius = 150;
       if (distance < repelRadius) {
         const angle = Math.atan2(distanceY, distanceX);
         const force = (repelRadius - distance) / repelRadius;
         const moveX = Math.cos(angle + Math.PI) * force * 100;
         const moveY = Math.sin(angle + Math.PI) * force * 100;
-
         exitBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
       } else {
         exitBtn.style.transform = `translate(0, 0)`;
       }
-    });
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
 
     // Just in case they somehow click it (mobile pulse or fast tap)
     exitBtn.addEventListener("click", () => {
@@ -782,51 +817,7 @@ const attachEvents = () => {
     setInterval(update, 1000);
   }
 
-  function initCatMascot() {
-    const cat = document.getElementById("cat-mascot");
-    if (!cat) return;
 
-    let currentState = 'idle';
-    let targetX = 40;
-    let currentX = 40;
-
-    function setState(state) {
-      cat.classList.remove('walking', 'sleeping', 'facing-left');
-      if (state === 'walking') cat.classList.add('walking');
-      if (state === 'sleeping') cat.classList.add('sleeping');
-      if (targetX < currentX && state === 'walking') cat.classList.add('facing-left');
-      currentState = state;
-    }
-
-    function move() {
-      // Small chance to change state
-      const rand = Math.random();
-
-      if (currentState === 'walking') {
-        // Move towards target
-        const dist = targetX - currentX;
-        if (Math.abs(dist) < 2) {
-          currentX = targetX;
-          setState(Math.random() > 0.3 ? 'idle' : 'sleeping');
-        } else {
-          currentX += dist > 0 ? 2 : -2;
-        }
-        cat.style.left = `${currentX}px`;
-      } else {
-        // Occasionaly start walking
-        if (rand < 0.05) {
-          targetX = Math.floor(Math.random() * 200) + 20; // Random X on heading
-          setState('walking');
-        } else if (rand < 0.02 && currentState === 'sleeping') {
-          setState('idle');
-        } else if (rand < 0.01 && currentState === 'idle') {
-          setState('sleeping');
-        }
-      }
-    }
-
-    setInterval(move, 100);
-  }
 
   function initTheme() {
     const themeToggle = document.getElementById('themeToggle');
@@ -894,7 +885,7 @@ const attachEvents = () => {
 
   initClock();
   initTheme();
-  initCatMascot();
+
 };
 
 buildOptions();

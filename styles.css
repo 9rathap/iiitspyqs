@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  scroll-behavior: smooth;
   --bg: #ffffff;
   --text: #1d1d1f;
   --text-secondary: #86868b;
@@ -16,6 +17,7 @@
   --font-main: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --tag-bg: #f5f5f7;
   --input-bg: #ffffff;
+  --fluid-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body.dark-mode {
@@ -85,8 +87,9 @@ a {
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  transition: transform 1.2s var(--fluid-ease), opacity 0.8s ease;
   background: var(--bg);
+  will-change: transform, opacity;
 }
 
 .splash-content {
@@ -153,10 +156,11 @@ a {
   font-weight: 600;
   border-radius: 999px;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s var(--fluid-ease), background 0.5s var(--fluid-ease), box-shadow 0.5s var(--fluid-ease);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   opacity: 1;
   transform: translateY(0);
+  will-change: transform;
 }
 
 .exit-button {
@@ -171,8 +175,8 @@ a {
   font-weight: 600;
   border-radius: 999px;
   cursor: pointer;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.1s ease-out;
-  /* Fast transform for repelling */
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Remove transform transition to prevent conflicts with direct JS updates */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   opacity: 1;
   transform: translate(0, 0);
@@ -208,7 +212,8 @@ a {
 /* Transitions */
 .site-container {
   opacity: 1;
-  transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 1s ease, transform 1s var(--fluid-ease);
+  will-change: transform, opacity;
 }
 
 .site-container.hidden {
@@ -483,133 +488,10 @@ main {
   color: var(--text);
   position: relative;
   z-index: 5;
+  will-change: transform;
 }
 
-/* Cat Mascot Mascot Branding */
-.cat-mascot {
-  position: absolute;
-  top: -21px;
-  /* Lowered to sit on top of letters */
-  left: 40px;
-  width: 32px;
-  height: 24px;
-  z-index: 50;
-  pointer-events: none;
-  transition: left 3s ease-in-out, transform 0.3s ease, opacity 0.5s ease;
-}
 
-.cat-body {
-  width: 20px;
-  height: 12px;
-  background: var(--accent);
-  border-radius: 8px 8px 3px 3px;
-  position: absolute;
-  bottom: 0;
-  left: 4px;
-  transition: all 0.5s ease;
-}
-
-.cat-head {
-  width: 12px;
-  height: 11px;
-  background: var(--accent);
-  border-radius: 50%;
-  position: absolute;
-  top: -7px;
-  right: -2px;
-  transition: all 0.5s ease;
-}
-
-.cat-ear {
-  width: 0;
-  height: 0;
-  border-left: 2.5px solid transparent;
-  border-right: 2.5px solid transparent;
-  border-bottom: 5px solid var(--accent);
-  position: absolute;
-  top: -3px;
-}
-
-.cat-ear.left {
-  left: 1px;
-  transform: rotate(-10deg);
-}
-
-.cat-ear.right {
-  right: 1px;
-  transform: rotate(10deg);
-}
-
-.cat-tail {
-  width: 10px;
-  height: 3px;
-  background: var(--accent);
-  position: absolute;
-  left: -8px;
-  bottom: 3px;
-  border-radius: 3px;
-  transform-origin: right center;
-  animation: cat-tail-flick 4s infinite ease-in-out;
-}
-
-@keyframes cat-tail-flick {
-
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  50% {
-    transform: rotate(-30deg);
-  }
-}
-
-/* Cat States */
-.cat-mascot.walking {
-  animation: cat-walk-bounce 0.4s infinite alternate ease-in-out;
-}
-
-@keyframes cat-walk-bounce {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-3px);
-  }
-}
-
-.cat-mascot.sleeping .cat-body {
-  height: 7px;
-  border-radius: 6px 6px 3px 3px;
-  animation: cat-sleep-breath 3s infinite ease-in-out;
-}
-
-.cat-mascot.sleeping .cat-head {
-  top: -2px;
-  right: -1px;
-}
-
-.cat-mascot.sleeping .cat-tail {
-  animation: none;
-  transform: rotate(-10deg);
-}
-
-@keyframes cat-sleep-breath {
-
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-
-  50% {
-    transform: scaleY(1.15);
-  }
-}
-
-.cat-mascot.facing-left {
-  transform: scaleX(-1);
-}
 
 .accent {
   display: block;
@@ -788,12 +670,12 @@ main {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.4s var(--fluid-ease), box-shadow 0.4s var(--fluid-ease), opacity 0.4s var(--fluid-ease);
   border: 1px solid rgba(0, 0, 0, 0.03);
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  will-change: transform;
+  will-change: transform, box-shadow;
 }
 
 /* Premium Spotlight Effect */
@@ -1145,10 +1027,7 @@ main {
     padding: 20px;
   }
 
-  .cat-mascot {
-    display: none;
-    /* Hide complex animation on mobile for performance */
-  }
+
 }
 
 /* View Transitions API - Flashy Theme Toggle */
