@@ -964,14 +964,17 @@ main {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .splash-tagline {
-    font-size: 28px;
-    padding: 0 16px;
+    font-size: 20px;
+    /* Reduced to ensure 'Experience seamless access' fits on one line */
+    padding: 0 12px;
     min-height: auto;
     margin-bottom: 32px;
-    max-width: 380px;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    line-height: 1.2;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    /* Ensure \n is respected */
   }
 
   .splash-actions {
