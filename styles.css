@@ -1,27 +1,37 @@
 :root {
   color-scheme: light;
   --bg: #ffffff;
-  /* Pure White */
   --text: #1d1d1f;
   --text-secondary: #86868b;
   --accent: #000000;
-  /* Pure Black */
   --accent-hover: #333333;
-
   --card-bg: #ffffff;
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
   --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
-  /* Adjusted for simpler lift */
-
   --nav-bg: rgba(255, 255, 255, 0.85);
-  /* Semi-transparent white */
   --border: #d2d2d7;
   --radius-lg: 20px;
-  /* Slightly tighter radius for cleaner look */
   --radius-md: 12px;
   --radius-sm: 8px;
-
   --font-main: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --tag-bg: #f5f5f7;
+  --input-bg: #ffffff;
+}
+
+body.dark-mode {
+  color-scheme: dark;
+  --bg: #000000;
+  --text: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --accent: #ffffff;
+  --accent-hover: #e8e8ed;
+  --card-bg: #111111;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --nav-bg: rgba(0, 0, 0, 0.85);
+  --border: #333333;
+  --tag-bg: #222222;
+  --input-bg: #111111;
 }
 
 * {
@@ -94,8 +104,8 @@ a {
   /* Decreased for more elegance */
   letter-spacing: -0.03em;
   margin-bottom: 40px;
-  color: #000;
-  /* Solid black */
+  color: var(--text);
+  /* Use theme variable */
   min-height: 2.5em;
   /* Adjusted for two lines */
   display: block;
@@ -135,8 +145,8 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: #000;
-  color: #fff;
+  background: var(--accent);
+  color: var(--bg);
   border: none;
   padding: 16px 36px;
   font-size: 18px;
@@ -153,9 +163,9 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  color: #000;
-  border: 1px solid #000;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
   padding: 16px 36px;
   font-size: 18px;
   font-weight: 600;
@@ -237,16 +247,64 @@ a {
   /* Internal padding matches main container */
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 /* Digital Clock Styling */
 .digital-clock {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-variant-numeric: tabular-nums;
-  color: #000;
+  color: var(--text);
   font-size: 32px;
   display: flex;
   align-items: baseline;
   gap: 2px;
   letter-spacing: -0.04em;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background: var(--tag-bg);
+  color: var(--text);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+}
+
+.theme-toggle:hover {
+  background: var(--border);
+  transform: scale(1.05);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sun-icon {
+  display: none;
+}
+
+.moon-icon {
+  display: block;
+}
+
+body.dark-mode .sun-icon {
+  display: block;
+}
+
+body.dark-mode .moon-icon {
+  display: none;
 }
 
 .clock-h {
@@ -371,7 +429,7 @@ main {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #000;
+  color: var(--text);
 }
 
 .calendar-grid {
@@ -397,18 +455,18 @@ main {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: #1d1d1f;
+  color: var(--text);
   transition: all 0.2s ease;
 }
 
 .calendar-day.today {
-  background: #000;
-  color: #fff;
+  background: var(--accent);
+  color: var(--bg);
   font-weight: 700;
 }
 
 .calendar-day.other-month {
-  color: #d2d2d7;
+  color: var(--text-secondary);
 }
 
 .hero-copy {
@@ -443,7 +501,7 @@ main {
 .cat-body {
   width: 20px;
   height: 12px;
-  background: #000;
+  background: var(--accent);
   border-radius: 8px 8px 3px 3px;
   position: absolute;
   bottom: 0;
@@ -454,7 +512,7 @@ main {
 .cat-head {
   width: 12px;
   height: 11px;
-  background: #000;
+  background: var(--accent);
   border-radius: 50%;
   position: absolute;
   top: -7px;
@@ -467,7 +525,7 @@ main {
   height: 0;
   border-left: 2.5px solid transparent;
   border-right: 2.5px solid transparent;
-  border-bottom: 5px solid #000;
+  border-bottom: 5px solid var(--accent);
   position: absolute;
   top: -3px;
 }
@@ -485,7 +543,7 @@ main {
 .cat-tail {
   width: 10px;
   height: 3px;
-  background: #000;
+  background: var(--accent);
   position: absolute;
   left: -8px;
   bottom: 3px;
@@ -587,7 +645,7 @@ main {
 
 .cta {
   background: var(--accent);
-  color: white;
+  color: var(--bg);
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -697,7 +755,7 @@ main {
   /* Pill shape */
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: white;
+  background: var(--input-bg);
   color: var(--text);
   min-width: 180px;
   transition: border-color 0.2s;
@@ -793,7 +851,7 @@ main {
   display: inline-block;
   padding: 6px 12px;
   border-radius: 6px;
-  background: #f5f5f7;
+  background: var(--tag-bg);
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 600;
@@ -831,7 +889,7 @@ main {
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border);
 }
 
 .exam-row:last-child {
@@ -858,9 +916,9 @@ main {
 .exam-links a,
 .year-trigger {
   font-size: 13px;
-  color: #000;
+  color: var(--text);
   font-weight: 600;
-  background: #f5f5f7;
+  background: var(--tag-bg);
   padding: 6px 14px;
   border-radius: 999px;
   transition: all 0.2s;
@@ -878,7 +936,7 @@ main {
 .ghost {
   font-size: 13px;
   color: var(--text-secondary);
-  background: #f5f5f7;
+  background: var(--tag-bg);
   padding: 6px 14px;
   border-radius: 999px;
   border: none;
@@ -899,7 +957,7 @@ main {
 .year-menu {
   position: relative;
   width: 100%;
-  background: #f8f8fa;
+  background: var(--tag-bg);
   border-radius: 12px;
   margin-top: 8px;
   padding: 0;
@@ -932,7 +990,7 @@ main {
 }
 
 .year-menu a:hover {
-  background: #f5f5f7;
+  background: var(--border);
 }
 
 
@@ -1093,12 +1151,44 @@ main {
   }
 }
 
-@media (max-width: 480px) {
-  .splash-tagline {
-    font-size: 28px;
-  }
+/* View Transitions API - Flashy Theme Toggle */
+::view-transition-group(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 
-  .hero-copy h1 {
-    font-size: 32px;
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+/* Force the new view to be on top and clipped by the circle */
+body.transition-theme::view-transition-new(root) {
+  z-index: 10000;
+}
+
+body.transition-theme::view-transition-old(root) {
+  z-index: 1;
+}
+
+/* Ripple effect utility for toggle button */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.2;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-pulse 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-pulse {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
   }
 }
