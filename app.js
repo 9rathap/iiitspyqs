@@ -625,7 +625,7 @@ const attachEvents = () => {
 
 
   // Typewriter Logic
-  const typewriterText = "Experience seamless access to\nprevious year questions.";
+  const typewriterText = "Experience seamless access\nto previous year questions.";
   const typewriterEl = document.getElementById("typewriter");
   const launchBtn = document.getElementById("launchBtn");
   const exitBtn = document.getElementById("exitBtn");
