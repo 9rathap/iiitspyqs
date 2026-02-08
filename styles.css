@@ -964,25 +964,29 @@ main {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .splash-tagline {
-    font-size: 36px;
+    font-size: 32px;
     padding: 0 20px;
     min-height: auto;
     margin-bottom: 32px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .splash-actions {
-    flex-direction: column;
-    gap: 16px;
+    flex-direction: row;
+    gap: 12px;
     width: 100%;
-    max-width: 280px;
+    justify-content: center;
     margin: 20px auto 0;
   }
 
   .launch-button,
   .exit-button {
-    width: 100%;
-    padding: 14px 24px;
-    font-size: 16px;
+    width: auto;
+    padding: 12px 20px;
+    font-size: 15px;
+    white-space: nowrap;
   }
 
   .hero-header {
@@ -1039,8 +1043,14 @@ main {
   .calendar-wrapper {
     width: 100%;
     max-width: 320px;
-    margin: 0 auto;
+    margin: 0 auto 48px;
     transform: translateX(0);
+  }
+
+  .hero-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .section-header h2 {
