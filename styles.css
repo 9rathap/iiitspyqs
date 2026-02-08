@@ -91,7 +91,7 @@ a {
   transition: transform 1.2s var(--fluid-ease), opacity 0.8s ease;
   background: var(--bg);
   will-change: transform, opacity;
-  padding-top: 20vh;
+  padding-top: 15vh;
   /* Lifted content higher for desktop */
 }
 
