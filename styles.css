@@ -963,35 +963,122 @@ main {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .splash-tagline {
+    font-size: 36px;
+    padding: 0 20px;
+    min-height: auto;
+    margin-bottom: 32px;
+  }
+
+  .splash-actions {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 280px;
+    margin: 20px auto 0;
+  }
+
+  .launch-button,
+  .exit-button {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+
   .hero-header {
-    padding: 16px 0;
+    padding: 12px 0;
   }
 
   .brand-container {
-    padding: 0 24px;
+    padding: 0 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .digital-clock {
+    font-size: 24px;
+  }
+
+  .clock-s {
+    font-size: 14px;
+  }
+
+  .college-name {
+    font-size: 12px;
+  }
+
+  .college-name.native {
+    font-size: 11px;
   }
 
   main {
-    padding: 40px 24px 80px;
+    padding: 40px 20px 80px;
+  }
+
+  .hero-layout {
+    flex-direction: column;
+    gap: 32px;
   }
 
   .hero-copy h1 {
-    font-size: 42px;
+    font-size: 36px;
+    line-height: 0.95;
   }
 
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  .hero-copy h1 .accent {
+    font-size: 20px;
+    margin-top: 12px;
+  }
+
+  .subtext {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .calendar-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    transform: translateX(0);
+  }
+
+  .section-header h2 {
+    font-size: 26px;
   }
 
   .filters {
     width: 100%;
     flex-direction: column;
+    gap: 16px;
   }
 
   .filter input,
   .filter select {
     width: 100%;
+    min-width: 0;
+  }
+
+  .pyq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pyq-card {
+    padding: 20px;
+  }
+
+  .cat-mascot {
+    display: none;
+    /* Hide complex animation on mobile for performance */
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-tagline {
+    font-size: 28px;
+  }
+
+  .hero-copy h1 {
+    font-size: 32px;
   }
 }
