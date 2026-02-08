@@ -963,6 +963,10 @@ main {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .splash-content {
+    padding: 0 16px;
+  }
+
   .splash-tagline {
     font-size: 20px;
     /* Reduced to ensure 'Experience seamless access' fits on one line */
