@@ -8,6 +8,11 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    if (sessionStorage.getItem('splashShown')) {
+      document.documentElement.classList.add('no-splash');
+    }
+  </script>
 </head>
 
 <body>
@@ -16,6 +21,8 @@
   <!-- Splash Screen -->
   <div id="splash" class="splash-screen">
     <div class="splash-content">
+      <div id="splashBrand" class="splash-brand hidden">pyqs by pa</div>
+      <div id="notice-typewriter" class="splash-notice"></div>
       <h1 class="splash-tagline" id="typewriter"></h1>
       <div class="splash-actions">
         <button id="launchBtn" class="launch-button hidden">
@@ -69,6 +76,7 @@
         </div>
         <div class="hero-actions">
           <button class="cta" type="button" id="heroBrowse">Browse PYQs</button>
+          <a href="exxam schedule.pdf" target="_blank" class="cta secondary" id="viewSchedule">View Schedule</a>
         </div>
       </section>
 
@@ -81,7 +89,6 @@
             <div class="filter">
               <label for="semester">Semester</label>
               <select id="semester">
-                <option value="all">All</option>
               </select>
             </div>
             <div class="filter">

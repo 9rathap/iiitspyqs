@@ -365,20 +365,24 @@ const unique = (items) => [...new Set(items)].sort((a, b) => a.localeCompare(b))
 
 const buildOptions = () => {
   unique(subjects.map((item) => item.semester)).forEach((value) => {
+    const semNum = parseInt(value);
     const option = document.createElement("option");
     option.value = value;
-    option.textContent = `Semester ${value}`;
+    if (semNum >= 5) {
+      option.textContent = `Semester ${value} (Coming soon)`;
+      option.disabled = true;
+    } else {
+      option.textContent = `Semester ${value}`;
+    }
     semesterSelect.appendChild(option);
   });
-
-  // Semester only. Branch/year removed for simplicity.
 };
 
 const matchesFilter = (item) => {
   const semester = semesterSelect.value;
   const query = searchInput.value.trim().toLowerCase();
 
-  const matchSemester = semester === "all" || item.semester === semester;
+  const matchSemester = item.semester === semester;
   const matchQuery =
     !query || `${item.subject} ${item.code}`.toLowerCase().includes(query);
 
@@ -410,6 +414,8 @@ const renderCards = () => {
 
     // Material Design Ripple Effect on click
     card.onclick = (e) => {
+      if (e.target.closest(".exam-row")) return;
+
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -522,32 +528,105 @@ const attachEvents = () => {
     el.addEventListener("input", renderCards);
   });
 
+  // PDF Dropdown Toggle for Touch/Click (Mobile only)
+  grid.addEventListener("click", (e) => {
+    if (window.innerWidth > 1200) return; // Use hover on desktop
+
+    const row = e.target.closest(".exam-row");
+    // If click is on a PDF link itself, let it open normally
+    if (e.target.closest(".year-menu a")) return;
+
+    if (row) {
+      const dropdown = row.querySelector(".year-dropdown");
+      if (dropdown) {
+        e.stopPropagation();
+        const isActive = dropdown.classList.contains("active");
+
+        // Close all other dropdowns
+        document.querySelectorAll(".year-dropdown.active").forEach(d => {
+          d.classList.remove("active");
+        });
+
+        if (!isActive) {
+          dropdown.classList.add("active");
+        }
+      }
+    }
+  });
+
+  // Close dropdowns when clicking outside
+  window.addEventListener("click", () => {
+    document.querySelectorAll(".year-dropdown.active").forEach(d => {
+      d.classList.remove("active");
+    });
+  });
+
 
 
   // Typewriter Logic
-  const typewriterText = "Experience seamless access\nto previous year questions.";
-  const typewriterEl = document.getElementById("typewriter");
+  const noticeText = "This archive contains all currently available Previous Year Question Papers.\nQuestion papers from Semester 5 onwards are still being collected and will be added progressively.\n\nThis is a community-driven initiative.\nIf you have PYQs that are missing, contributing them through our Discord server will help improve this archive for everyone.";
+  const taglineText = "experience seamless access\nto previous year questions.";
+
+  const noticeEl = document.getElementById("notice-typewriter");
+  const taglineEl = document.getElementById("typewriter");
+  const splashBrand = document.getElementById("splashBrand");
   const launchBtn = document.getElementById("launchBtn");
   const exitBtn = document.getElementById("exitBtn");
   const splash = document.getElementById("splash");
   const appContainer = document.getElementById("app-container");
 
-  let charIndex = 0;
-  function type() {
-    if (charIndex < typewriterText.length) {
-      typewriterEl.textContent += typewriterText.charAt(charIndex);
-      charIndex++;
-      setTimeout(type, 50); // Speed: 50ms per char
-    } else {
-      // Show action buttons after typing is done
-      if (launchBtn) launchBtn.classList.remove("hidden");
-      if (exitBtn) exitBtn.classList.remove("hidden");
-    }
-  }
+  // Check if splash has been shown in this session
+  if (sessionStorage.getItem('splashShown')) {
+    if (splash) splash.style.display = "none";
+    if (appContainer) appContainer.classList.remove("hidden");
+  } else {
+    function typeLine(element, text, speed, callback) {
+      if (!element) {
+        if (callback) callback();
+        return;
+      }
 
-  // Start typewriter
-  if (typewriterEl) {
-    setTimeout(type, 500); // Small initial delay
+      let i = 0;
+
+      function step() {
+        if (i === 0) element.classList.add('typing');
+
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(step, speed);
+        } else {
+          element.classList.remove('typing');
+          if (callback) callback();
+        }
+      }
+      step();
+    }
+
+    // Start sequence
+    setTimeout(() => {
+      // Type notice first (faster speed for longer text)
+      typeLine(noticeEl, noticeText, 20, () => {
+        // Pause briefly
+        setTimeout(() => {
+          // Type tagline
+          typeLine(taglineEl, taglineText, 50, () => {
+            // Show action buttons and brand after typing is done
+            if (launchBtn) launchBtn.classList.remove("hidden");
+            if (exitBtn) exitBtn.classList.remove("hidden");
+            if (splashBrand) splashBrand.classList.remove("hidden");
+
+            // Keep cursor on tagline blinking at the end if desired, or let it fade.
+            // If we want it to stay 'active' looking, we can add a class or let it be.
+            // Current CSS removes cursor when .typing is removed.
+            // Let's add .typing back or a separate class if we want the cursor to stay.
+            // For now, let's let it finish cleanly. 
+            // Actually, usually the cursor stays on the last element.
+            if (taglineEl) taglineEl.classList.add('typing');
+          });
+        }, 500);
+      });
+    }, 500);
   }
 
   // Evasive Exit Button Logic
@@ -609,6 +688,7 @@ const attachEvents = () => {
   // Launch Archive Logic
   if (launchBtn) {
     launchBtn.addEventListener("click", () => {
+      sessionStorage.setItem('splashShown', 'true');
       splash.classList.add("splash-out");
       appContainer.classList.remove("hidden");
 
@@ -676,10 +756,26 @@ const attachEvents = () => {
 
     for (let i = 1; i <= daysInMonth; i++) {
       const isToday = i === today ? 'today' : '';
-      html += `<div class="calendar-day ${isToday}">${i}</div>`;
+      let isExam = '';
+      if (month === 1 && i >= 20 && i <= 26) {
+        isExam = 'exam-date';
+      }
+      html += `<div class="calendar-day ${isToday} ${isExam}">${i}</div>`;
     }
 
     html += `</div>`;
+    if (month === 1) {
+      html += `
+        <div class="calendar-info">
+          <div class="exam-pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17l9.2-9.2M17 17V7H7"/>
+            </svg>
+            <span>Midsem: Feb 20-26</span>
+          </div>
+        </div>
+      `;
+    }
     container.innerHTML = html;
   }
 
