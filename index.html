@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College PYQs</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+
+  <!-- Splash Screen -->
+  <div id="splash" class="splash-screen">
+    <div class="splash-content">
+      <h1 class="splash-tagline" id="typewriter"></h1>
+      <div class="splash-actions">
+        <button id="launchBtn" class="launch-button hidden">
+          Study
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+        <button id="exitBtn" class="exit-button hidden">Exit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-container" class="site-container hidden">
+    <header class="hero-header">
+      <div class="brand-container">
+        <div class="college-stack">
+          <p class="college-name">Indian Institute of Information Technology Sri City, Chittoor</p>
+          <p class="college-name native">भारतीय सूचना प्रौद्योगिकी संस्थान श्री सिटी, चित्तूर</p>
+          <p class="college-tagline">(An Institute of National Importance under an Act of Parliament)</p>
+        </div>
+        <div id="header-clock" class="digital-clock"></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <div id="cat-mascot" class="cat-mascot">
+              <div class="cat-body">
+                <div class="cat-head">
+                  <div class="cat-ear left"></div>
+                  <div class="cat-ear right"></div>
+                </div>
+                <div class="cat-tail"></div>
+              </div>
+            </div>
+            <h1>
+              ACADEMIC<br>ARCHIVES
+              <span class="accent">Past Paper Collection</span>
+            </h1>
+            <p class="subtext">
+              Browse semester-wise papers and open PDFs instantly.
+            </p>
+          </div>
+          <div id="calendar-container" class="calendar-wrapper"></div>
+        </div>
+        <div class="hero-actions">
+          <button class="cta" type="button" id="heroBrowse">Browse PYQs</button>
+        </div>
+      </section>
+
+      <section id="browse" class="browse">
+        <div class="section-header">
+          <div>
+            <h2>Pick your semester.</h2>
+          </div>
+          <div class="filters">
+            <div class="filter">
+              <label for="semester">Semester</label>
+              <select id="semester">
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div class="filter">
+              <label for="search">Search</label>
+              <input id="search" type="search" placeholder="Subject or code" />
+            </div>
+          </div>
+        </div>
+        <div class="pyq-grid" id="pyqGrid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>This website is a personal project and is not officially affiliated with IIIT Sri City. All materials are
+        provided for academic reference only.</p>
+    </footer>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+
+</html>
