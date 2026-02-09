@@ -571,7 +571,6 @@ const attachEvents = () => {
   const taglineEl = document.getElementById("typewriter");
   const splashBrand = document.getElementById("splashBrand");
   const launchBtn = document.getElementById("launchBtn");
-  const exitBtn = document.getElementById("exitBtn");
   const splash = document.getElementById("splash");
   const appContainer = document.getElementById("app-container");
 
@@ -606,14 +605,13 @@ const attachEvents = () => {
     // Start sequence
     setTimeout(() => {
       // Type notice first (faster speed for longer text)
-      typeLine(noticeEl, noticeText, 20, () => {
+      typeLine(noticeEl, noticeText, 10, () => {
         // Pause briefly
         setTimeout(() => {
           // Type tagline
           typeLine(taglineEl, taglineText, 50, () => {
-            // Show action buttons and brand after typing is done
+            // Show action button and brand after typing is done
             if (launchBtn) launchBtn.classList.remove("hidden");
-            if (exitBtn) exitBtn.classList.remove("hidden");
             if (splashBrand) splashBrand.classList.remove("hidden");
 
             // Keep cursor on tagline blinking at the end if desired, or let it fade.
@@ -629,61 +627,6 @@ const attachEvents = () => {
     }, 500);
   }
 
-  // Evasive Exit Button Logic
-  if (exitBtn) {
-    let baseX, baseY;
-
-    function updateBasePosition() {
-      const rect = exitBtn.getBoundingClientRect();
-      // We calculate the base center relative to current scroll + transform
-      // But since it's on a splash overlay that doesn't scroll yet, 
-      // simple rect.left + rect.width/2 is fine. 
-      // We subtract current transform to get the true '0,0' center.
-      const style = window.getComputedStyle(exitBtn);
-      const matrix = new WebKitCSSMatrix(style.transform);
-      baseX = rect.left + rect.width / 2 - matrix.m41;
-      baseY = rect.top + rect.height / 2 - matrix.m42;
-    }
-
-    // Initial capture (wait for a frame to ensure layout)
-    requestAnimationFrame(updateBasePosition);
-    window.addEventListener('resize', updateBasePosition);
-
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    function loop() {
-      if (!baseX || !baseY) {
-        requestAnimationFrame(loop);
-        return;
-      }
-
-      const distanceX = mouseX - baseX;
-      const distanceY = mouseY - baseY;
-      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-      const repelRadius = 150;
-      if (distance < repelRadius) {
-        const angle = Math.atan2(distanceY, distanceX);
-        const force = (repelRadius - distance) / repelRadius;
-        const moveX = Math.cos(angle + Math.PI) * force * 100;
-        const moveY = Math.sin(angle + Math.PI) * force * 100;
-        exitBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      } else {
-        exitBtn.style.transform = `translate(0, 0)`;
-      }
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-
-    // Just in case they somehow click it (mobile pulse or fast tap)
-    exitBtn.addEventListener("click", () => {
-      alert("Nice try! But you're here to study. 😉");
-    });
-  }
 
   // Launch Archive Logic
   if (launchBtn) {
@@ -787,16 +730,23 @@ const attachEvents = () => {
 
     function update() {
       const now = new Date();
-      const h = String(now.getHours()).padStart(2, "0");
+      let h = now.getHours();
       const m = String(now.getMinutes()).padStart(2, "0");
       const s = String(now.getSeconds()).padStart(2, "0");
 
+      // Convert to 12-hour format
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12;
+      h = h ? h : 12; // hour '0' should be '12'
+      const hStr = String(h).padStart(2, "0");
+
       clockEl.innerHTML = `
-        <span class="clock-h">${h}</span>
+        <span class="clock-h">${hStr}</span>
         <span class="clock-sep">:</span>
         <span class="clock-m">${m}</span>
         <span class="clock-sep">:</span>
         <span class="clock-s">${s}</span>
+        <span class="clock-ampm">${ampm}</span>
       `;
     }
 

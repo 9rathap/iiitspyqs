@@ -84,15 +84,15 @@ a {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: flex-start;
-  /* Anchor to top to prevent typewriter jumping */
+  align-items: center;
+  /* Center vertically on desktop */
   justify-content: center;
   z-index: 2000;
   transition: transform 1.2s var(--fluid-ease), opacity 0.8s ease;
   background: var(--bg);
   will-change: transform, opacity;
-  padding-top: 15vh;
-  /* Lifted content higher for desktop */
+  padding: 0 60px;
+  box-sizing: border-box;
 }
 
 /* Prevent flicker on refresh */
@@ -109,19 +109,22 @@ html.no-splash .site-container {
 .splash-content {
   text-align: center;
   max-width: 1000px;
-  /* Increased to fit two lines better */
-  padding: 0 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .splash-brand {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   margin-bottom: 24px;
-  /* opacity removed to match tagline brightness */
   transition: opacity 0.8s ease, transform 0.8s var(--fluid-ease);
+  position: relative;
 }
 
 .splash-brand.hidden {
@@ -158,9 +161,6 @@ html.no-splash .site-container {
   /* Reserve space */
   white-space: pre-wrap;
   text-align: center;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 
@@ -228,70 +228,68 @@ html.no-splash .site-container {
   background: #f5f5f7;
 }
 
-/* Mobile Splash Adjustments */
-@media (max-width: 1200px) {
-  .splash-content {
-    padding: 0 24px;
-    width: 100%;
+/* Gradual responsive font sizing for smooth transitions */
+@media (max-width: 1400px) and (min-width: 1001px) {
+  .splash-tagline {
+    font-size: 64px;
+  }
+
+  .splash-notice {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1000px) and (min-width: 801px) {
+  .splash-tagline {
+    font-size: 52px;
+  }
+
+  .splash-notice {
+    font-size: 14px;
+  }
+
+  .splash-brand {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 800px) and (min-width: 601px) {
+  .splash-tagline {
+    font-size: 42px;
+  }
+
+  .splash-notice {
+    font-size: 14px;
   }
 
   .splash-brand {
     font-size: 11px;
-    /* Smaller brand text */
-    letter-spacing: 0.15em;
-    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .splash-tagline {
+    font-size: 28px;
+    line-height: 1.2;
   }
 
   .splash-notice {
     font-size: 13px;
-    /* Readable but small */
     line-height: 1.5;
-    margin-bottom: 24px;
-    min-height: auto;
-    /* Remove huge gap */
-    margin-left: 0;
-    margin-right: 0;
-    text-align: center;
   }
 
-  .splash-tagline {
-    font-size: 32px;
-    /* Much smaller for phone screens */
-    line-height: 1.15;
-    margin-bottom: 32px;
-    letter-spacing: -0.02em;
-    min-height: auto;
-    /* Remove gap */
+  .splash-brand {
+    font-size: 11px;
   }
 
   .splash-actions {
-    flex-direction: column;
-    /* Stack buttons on very small screens? Or keep row */
     gap: 12px;
-    width: 100%;
   }
 
   .launch-button,
   .exit-button {
-    width: 100%;
-    /* Full width buttons for easy tapping */
-    justify-content: center;
-    padding: 14px 24px;
-    font-size: 16px;
-  }
-
-  .splash-brand.hidden {
-    transform: translateY(-30px);
-    /* Explicit drop from top for mobile */
-    opacity: 0;
-  }
-
-  .launch-button.hidden,
-  .exit-button.hidden {
-    transform: translateY(-30px);
-    /* Explicit drop from top for mobile */
-    opacity: 0;
-    pointer-events: none;
+    padding: 12px 20px;
+    font-size: 15px;
   }
 }
 
@@ -345,6 +343,7 @@ html.no-splash .site-container {
   margin: 0 auto;
   width: 100%;
   padding: 0 60px;
+  box-sizing: border-box;
   /* Internal padding matches main container */
 }
 
@@ -427,6 +426,14 @@ body.dark-mode .moon-icon {
   padding: 0 1px;
 }
 
+.clock-ampm {
+  font-weight: 500;
+  font-size: 0.6em;
+  color: var(--text-secondary);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 .college-logo {
   height: 64px;
   /* Slightly smaller for header */
@@ -470,6 +477,8 @@ main {
   /* Centered content container */
   margin: 0 auto;
   padding: 80px 60px 120px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Hero Section */
@@ -570,6 +579,21 @@ main {
   font-weight: 600;
   border: 1px solid var(--accent);
   border-radius: 50%;
+  animation: exam-pulse 2s ease-in-out infinite;
+}
+
+@keyframes exam-pulse {
+
+  0%,
+  100% {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+  }
+
+  50% {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .calendar-info {
@@ -1043,7 +1067,8 @@ main {
 }
 
 .year-menu a:hover {
-  background: var(--border);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 
@@ -1066,35 +1091,168 @@ main {
   text-align: left;
   color: var(--text-secondary);
   font-size: 13px;
-  padding: 60px 0;
+  padding: 60px 60px;
   border-top: 1px solid var(--border);
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 1200px) {
+.footer p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.submit-pyq-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s var(--fluid-ease);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.submit-pyq-button:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.submit-pyq-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contribute-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s var(--fluid-ease);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  animation: contribute-glow 3s ease-in-out infinite;
+}
+
+@keyframes contribute-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.contribute-button:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background: var(--accent-hover);
+  animation: none;
+}
+
+.contribute-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Intermediate Desktop Sizes - Responsive Padding */
+@media (max-width: 1400px) and (min-width: 1201px) {
+
+  .brand-container,
+  main,
+  .footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
   .splash-screen {
-    padding-top: 25vh;
-    /* Keep consistent on smaller screens */
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 1201px) {
+
+  .brand-container,
+  main,
+  .footer {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .splash-screen {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+/* Center hero content at all sizes below 1100px */
+@media (max-width: 1100px) {
+  .hero {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-copy h1 {
+    text-align: center;
+  }
+
+  .subtext {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .calendar-wrapper {
+    margin: 0 auto 40px auto;
+    /* Add bottom margin for spacing from buttons */
+  }
+}
+
+/* Mobile Layout Changes */
+@media (max-width: 800px) {
+  .splash-screen {
+    align-items: flex-start;
+    padding-top: 20vh;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .splash-content {
-    padding: 0 16px;
-  }
-
-  .splash-tagline {
-    font-size: 20px;
-    /* Reduced to ensure 'Experience seamless access' fits on one line */
-    padding: 0 12px;
-    min-height: auto;
-    margin-bottom: 32px;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    /* Ensure \n is respected */
+    min-width: 100%;
   }
 
   .splash-actions {
@@ -1113,6 +1271,14 @@ main {
     font-size: 14px;
     white-space: nowrap;
     min-width: 110px;
+  }
+
+  /* Remove min-width constraints to allow proper centering */
+  .brand-container,
+  main,
+  .footer {
+    min-width: 0;
+    width: 100%;
   }
 
   .hero-header {
