@@ -642,7 +642,9 @@ const attachEvents = () => {
     });
   }
 
-  document.getElementById("heroBrowse").addEventListener("click", (e) => {
+  const browseButton = document.getElementById("heroBrowse");
+
+  browseButton.addEventListener("click", (e) => {
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -657,7 +659,22 @@ const attachEvents = () => {
 
     setTimeout(() => ripple.remove(), 600);
 
+    // Blur the button to remove hover state
+    setTimeout(() => button.blur(), 50);
+
     document.getElementById("browse").scrollIntoView({ behavior: "smooth" });
+  });
+
+  // Handle touch devices specifically to prevent hover state persistence
+  browseButton.addEventListener("touchend", (e) => {
+    const button = e.currentTarget;
+    // Force remove any stuck pseudo-states on mobile
+    setTimeout(() => {
+      button.blur();
+      // Force a style recalculation to clear any stuck states
+      button.style.transform = '';
+      void button.offsetWidth; // Trigger reflow
+    }, 100);
   });
 
   function initCalendar() {

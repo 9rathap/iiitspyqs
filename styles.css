@@ -377,13 +377,17 @@ html.no-splash .site-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Only transition transform, not colors - colors should change instantly with theme */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--border);
 }
 
-.theme-toggle:hover {
-  background: var(--border);
-  transform: scale(1.05);
+/* Only enable hover on devices with true hover capability */
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    background: var(--border);
+    transform: scale(1.05);
+  }
 }
 
 .theme-toggle svg {
@@ -709,22 +713,32 @@ main {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition: width 0.3s ease-out, height 0.3s ease-out;
+  pointer-events: none;
 }
 
-.cta:hover::before {
-  width: 300px;
-  height: 300px;
-}
+/* Only enable hover animations on devices that support true hover (not touch) */
+@media (hover: hover) and (pointer: fine) {
+  .cta:hover:not(:active)::before {
+    width: 300px;
+    height: 300px;
+  }
 
-.cta:hover {
-  background: var(--accent-hover);
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  .cta:hover {
+    background: var(--accent-hover);
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .cta:active {
   transform: scale(0.98);
+}
+
+.cta:active::before {
+  width: 0;
+  height: 0;
+  transition: width 0.1s, height 0.1s;
 }
 
 .cta.secondary {
