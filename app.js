@@ -603,28 +603,63 @@ const attachEvents = () => {
     }
 
     // Start sequence
+    // Start sequence
     setTimeout(() => {
-      // Type notice first (faster speed for longer text)
-      typeLine(noticeEl, noticeText, 10, () => {
-        // Pause briefly
-        setTimeout(() => {
-          // Type tagline
-          typeLine(taglineEl, taglineText, 50, () => {
-            // Show action button and brand after typing is done
-            if (launchBtn) launchBtn.classList.remove("hidden");
-            if (splashBrand) splashBrand.classList.remove("hidden");
+      // 1. Fade in Notice text immediately
+      if (noticeEl) {
+        noticeEl.textContent = noticeText;
+        noticeEl.classList.add('visible');
+      }
 
-            // Keep cursor on tagline blinking at the end if desired, or let it fade.
-            // If we want it to stay 'active' looking, we can add a class or let it be.
-            // Current CSS removes cursor when .typing is removed.
-            // Let's add .typing back or a separate class if we want the cursor to stay.
-            // For now, let's let it finish cleanly. 
-            // Actually, usually the cursor stays on the last element.
-            if (taglineEl) taglineEl.classList.add('typing');
-          });
-        }, 500);
-      });
-    }, 500);
+      // 2. Animate Tagline: Words forming
+      if (taglineEl) {
+        // Split text into words (handling newline)
+        // Split text into words to keep structure
+        const words = taglineText.split(/(\s+)/);
+        taglineEl.innerHTML = '';
+
+        const charElements = [];
+
+        words.forEach(wordChunk => {
+          if (wordChunk.match(/\s/)) {
+            if (wordChunk.includes('\n')) {
+              taglineEl.appendChild(document.createElement('br'));
+            }
+          } else {
+            const wordWrapper = document.createElement('span');
+            wordWrapper.className = 'word-wrapper';
+
+            const chars = wordChunk.split('');
+            chars.forEach(char => {
+              const charSpan = document.createElement('span');
+              charSpan.textContent = char;
+              charSpan.className = 'char';
+              wordWrapper.appendChild(charSpan);
+              charElements.push(charSpan);
+            });
+
+            taglineEl.appendChild(wordWrapper);
+          }
+        });
+
+        // Animate characters sequentially
+        // Animate characters quickly (Forming Effect)
+        let delay = 0;
+        charElements.forEach((charSpan, index) => {
+          setTimeout(() => {
+            charSpan.classList.add('visible');
+            // 3. Reveal Brand/Button after LAST character
+            if (index === charElements.length - 1) {
+              setTimeout(() => {
+                if (splashBrand) splashBrand.classList.remove("hidden");
+                if (launchBtn) launchBtn.classList.remove("hidden");
+              }, 100);
+            }
+          }, delay);
+          delay += 15; // Very fast ripple (almost at once)
+        });
+      }
+    }, 300);
   }
 
 

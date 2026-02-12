@@ -134,20 +134,35 @@ html.no-splash .site-container {
 
 .splash-tagline {
   font-size: 72px;
-  /* Increased for impact */
   line-height: 1.1;
   font-weight: 400;
-  /* Decreased for more elegance */
   letter-spacing: -0.03em;
   margin-bottom: 40px;
   color: var(--text);
-  /* Use theme variable */
   min-height: 2.5em;
-  /* Adjusted for two lines */
   display: block;
-  /* Take full container width */
-  white-space: pre-wrap;
   text-align: center;
+}
+
+.splash-tagline .word-wrapper {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.25em;
+}
+
+.splash-tagline .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px) scale(1.1);
+  filter: blur(5px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1), filter 0.8s ease;
+  will-change: opacity, transform, filter;
+}
+
+.splash-tagline .char.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 
@@ -158,9 +173,14 @@ html.no-splash .site-container {
   color: var(--text-secondary);
   margin-bottom: 32px;
   min-height: 8em;
-  /* Reserve space */
   white-space: pre-wrap;
   text-align: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.splash-notice.visible {
+  opacity: 1;
 }
 
 
