@@ -603,6 +603,8 @@ const attachEvents = () => {
     }
 
     // Start sequence
+    if (taglineEl) taglineEl.innerHTML = ''; // prevent initial flash
+
     // Start sequence
     setTimeout(() => {
       // 1. Fade in Notice text immediately
