@@ -174,7 +174,9 @@ const pdfCatalog = {
     "end": [
       { "label": "2023", "path": "pyqdata/sem2/probability and statistics/end/2023.pdf" }
     ],
-    "quiz": []
+    "quiz": [
+      { "label": "2026", "path": "pyqdata/sem2/probability and statistics/quiz/2026.pdf" }
+    ]
   },
   "2|DSA": {
     "mid": [
