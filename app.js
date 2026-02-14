@@ -453,15 +453,22 @@ const renderCards = () => {
         if (entries.length > 0) {
           links = `
             <div class="year-dropdown">
-              <span class="year-trigger">${entries.length} PYQs available</span>
+              <div class="year-trigger">
+                <span>${entries.length} PYQs available</span>
+                <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
               <div class="year-menu">
-                ${entries
+                <div class="year-menu-inner">
+                  ${entries
               .sort((a, b) => b.label.localeCompare(a.label, undefined, { numeric: true, sensitivity: 'base' }))
               .map(
                 (entry, idx) =>
                   `<a href="${entry.path}" target="_blank" rel="noopener">${entry.label}</a>`
               )
               .join("")}
+                </div>
               </div>
             </div>
           `;
