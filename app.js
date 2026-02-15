@@ -762,12 +762,11 @@ const attachEvents = () => {
 
     for (let i = 1; i <= daysInMonth; i++) {
       const isToday = i === today ? 'today' : '';
-      const isValentines = (month === 1 && i === 14) ? 'valentines' : '';
       let isExam = '';
       if (month === 1 && i >= 20 && i <= 26) {
         isExam = 'exam-date';
       }
-      html += `<div class="calendar-day ${isToday} ${isValentines} ${isExam}">${i}</div>`;
+      html += `<div class="calendar-day ${isToday} ${isExam}">${i}</div>`;
     }
 
     html += `</div>`;
