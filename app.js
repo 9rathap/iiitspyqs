@@ -533,9 +533,12 @@ const observeReveals = () => {
 };
 
 const attachEvents = () => {
-  [semesterSelect, searchInput].forEach((el) => {
-    el.addEventListener("input", renderCards);
+  semesterSelect.addEventListener("input", () => {
+    localStorage.setItem("selectedSemester", semesterSelect.value);
+    renderCards();
   });
+
+  searchInput.addEventListener("input", renderCards);
 
   // PDF Dropdown Toggle for Touch/Click (Mobile only)
   grid.addEventListener("click", (e) => {
@@ -889,6 +892,14 @@ const attachEvents = () => {
 };
 
 buildOptions();
-semesterSelect.value = "1";
+
+// Load saved semester or default to "1"
+const savedSemester = localStorage.getItem("selectedSemester");
+if (savedSemester) {
+  semesterSelect.value = savedSemester;
+} else {
+  semesterSelect.value = "1";
+}
+
 renderCards();
 attachEvents();

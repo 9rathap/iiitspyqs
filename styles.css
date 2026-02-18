@@ -982,7 +982,7 @@ main {
   border-bottom: 1px solid var(--border);
   cursor: pointer;
   border-radius: 8px;
-  transition: background 0.2s var(--fluid-ease);
+  transition: background 0.1s var(--fluid-ease);
 }
 
 .exam-row:hover {
@@ -1060,7 +1060,7 @@ main {
   background: var(--tag-bg);
   padding: 6px 14px;
   border-radius: 999px;
-  transition: all 0.3s var(--fluid-ease);
+  transition: all 0.15s var(--fluid-ease);
   border: 1px solid transparent;
   user-select: none;
 }
@@ -1086,7 +1086,7 @@ main {
 .year-menu {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s var(--fluid-ease), opacity 0.3s ease, margin-top 0.4s var(--fluid-ease);
+  transition: grid-template-rows 0.25s var(--fluid-ease), opacity 0.2s ease, margin-top 0.25s var(--fluid-ease);
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
@@ -1117,7 +1117,7 @@ main {
 .year-menu a {
   opacity: 0;
   transform: translateY(4px);
-  transition: all 0.3s var(--fluid-ease);
+  transition: opacity 0.2s ease, transform 0.25s var(--fluid-ease), background 0.1s ease, color 0.1s ease;
 }
 
 .year-dropdown.active .year-menu a,
@@ -1126,25 +1126,7 @@ main {
   transform: translateY(0);
 }
 
-.year-menu a:nth-child(1) {
-  transition-delay: 0.05s;
-}
-
-.year-menu a:nth-child(2) {
-  transition-delay: 0.1s;
-}
-
-.year-menu a:nth-child(3) {
-  transition-delay: 0.15s;
-}
-
-.year-menu a:nth-child(4) {
-  transition-delay: 0.2s;
-}
-
-.year-menu a:nth-child(5) {
-  transition-delay: 0.25s;
-}
+/* Staggered delays removed for snappier feel */
 
 /* Desktop Hover Behavior */
 @media (min-width: 1201px) {
