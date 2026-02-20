@@ -597,7 +597,6 @@ main {
   font-weight: 700;
 }
 
-
 .calendar-day.exam-date {
   background: transparent;
   color: var(--text);
@@ -605,6 +604,12 @@ main {
   border: 1px solid var(--accent);
   border-radius: 50%;
   animation: exam-pulse 2s ease-in-out infinite;
+}
+
+/* Ensure today's highlight wins even if it's an exam date */
+.calendar-day.today.exam-date {
+  background: var(--accent);
+  color: var(--bg);
 }
 
 @keyframes exam-pulse {
