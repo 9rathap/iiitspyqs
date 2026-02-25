@@ -348,7 +348,7 @@ const pdfCatalog = {
       { "label": "2026", "path": "pyqdata/sem4/Artificial Intelligence /mid/2026.pdf" }
     ],
     "end": [
-      { "label": "AI_End", "path": "pyqdata/sem4/Artificial Intelligence /end/AI_End.pdf" }
+      { "label": "2023", "path": "pyqdata/sem4/Artificial Intelligence /end/AI_End.pdf" }
     ],
     "quiz": [
       { "label": "2024-1", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-1.pdf" },
