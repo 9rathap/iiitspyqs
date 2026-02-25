@@ -88,6 +88,38 @@ const examTypes = [
   { id: "end", label: "End Sem" },
 ];
 
+/**
+ * RECENT SUBMISSIONS DATA
+ * Add new manual submissions to this array.
+ * Format: { name: "Name", meta: "Paper Details" }
+ */
+const recentSubmissions = [
+  { name: "Tanuj Sai", meta: "Artificial Intelligence Mid Sem 2026" },
+  { name: "Harshaveer Doddi", meta: "Signal and Systems Mid 2 2022" },
+  { name: "Prathap Arimilli", meta: "Probability and Statistics Quiz 2026" },
+];
+
+function renderSubmissions() {
+  const container = document.getElementById("recentSubmissionsList");
+  if (!container) return;
+
+  container.innerHTML = recentSubmissions
+    .map(sub => `
+      <div class="submission-item">
+        <svg class="contributor-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <div class="submission-content">
+          <span class="contributor-name">${sub.name}</span>
+          <span class="submission-meta">submitted - ${sub.meta}</span>
+        </div>
+      </div>
+    `)
+    .join("");
+}
+
+
 const pdfCatalog = {
   "1|CP": {
     "mid": [
@@ -903,4 +935,5 @@ if (savedSemester) {
 }
 
 renderCards();
+renderSubmissions();
 attachEvents();
