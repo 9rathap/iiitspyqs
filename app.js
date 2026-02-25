@@ -40,6 +40,8 @@ const semesters = [
       { title: "Fundamentals of Full Stack Development", code: "FFSD" },
       { title: "Theory of Computation", code: "TOC" },
       { title: "Artificial Intelligence", code: "AI" },
+      { title: "Electromagnetics and Transmission Lines", code: "ETL" },
+      { title: "Fundamentals of Communication", code: "FC" },
     ],
   },
   {
@@ -94,9 +96,10 @@ const examTypes = [
  * Format: { name: "Name", meta: "Paper Details" }
  */
 const recentSubmissions = [
+  { name: "Siddartha Sripathy", meta: "Fundamentals of Communication mid sem 2026" },
+  { name: "Siddartha Sripathy", meta: "Electromagnetic and Transmission Lines " },
   { name: "Tanuj Sai", meta: "Artificial Intelligence Mid Sem 2026" },
   { name: "Harshaveer Doddi", meta: "Signal and Systems Mid 2 2022" },
-  { name: "Prathap Arimilli", meta: "Probability and Statistics Quiz 2026" },
 ];
 
 function renderSubmissions() {
@@ -354,6 +357,25 @@ const pdfCatalog = {
       { "label": "2024-1", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-1.pdf" },
       { "label": "2024-2", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-2.pdf" }
     ]
+  },
+  "4|FFSD": {
+    "mid": [],
+    "end": [],
+    "quiz": []
+  },
+  "4|ETL": {
+    "mid": [
+      { "label": "2026", "path": "pyqdata/sem4/Electromagnetics and Transmission Lines/mid/2026.pdf" }
+    ],
+    "end": [],
+    "quiz": []
+  },
+  "4|FC": {
+    "mid": [
+      { "label": "2026", "path": "pyqdata/sem4/Fundamentals of Communication /mid/2026.pdf" }
+    ],
+    "end": [],
+    "quiz": []
   }
 }
   ;
