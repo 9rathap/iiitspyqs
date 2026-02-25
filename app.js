@@ -97,7 +97,7 @@ const examTypes = [
  */
 const recentSubmissions = [
   { name: "Siddartha Sripathy", meta: "Fundamentals of Communication mid sem 2026" },
-  { name: "Siddartha Sripathy", meta: "Electromagnetic and Transmission Lines " },
+  { name: "Siddartha Sripathy", meta: "Electromagnetic and Transmission Lines mid sem 2026 " },
   { name: "Tanuj Sai", meta: "Artificial Intelligence Mid Sem 2026" },
   { name: "Harshaveer Doddi", meta: "Signal and Systems Mid 2 2022" },
 ];
