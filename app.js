@@ -20,6 +20,7 @@ const semesters = [
       { title: "Signals and Systems", code: "S&S" },
       { title: "Computer Architecture", code: "CA" },
       { title: "Operational Communication", code: "OC" },
+      { title: "Basic Electronics Circuits", code: "BEC" },
     ],
   },
   {
@@ -97,6 +98,7 @@ const examTypes = [
  * Format: { name: "Name", meta: "Paper Details" }
  */
 const recentSubmissions = [
+  { name: "Kavish Shri Vatsav", meta: "Basic Electronics Circuits Mid Sem 2026" },
   { name: "Anonymous", meta: "Operational Communication Mid Sem 2026" },
   { name: "Satyanarayana K", meta: "Computer Architecture Mid Sem 2026" },
   { name: "Anonymous", meta: "Data Structures and Algorithms Mid Sem 2026" },
@@ -256,6 +258,13 @@ const pdfCatalog = {
   "2|OC": {
     "mid": [
       { "label": "2026", "path": "pyqdata/sem2/operational communication/mid/2026.pdf" }
+    ],
+    "end": [],
+    "quiz": []
+  },
+  "2|BEC": {
+    "mid": [
+      { "label": "2026", "path": "pyqdata/sem2/Basic Electronics Circuits/mid/2026.pdf" }
     ],
     "end": [],
     "quiz": []
