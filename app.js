@@ -842,19 +842,23 @@ const attachEvents = () => {
       let isExam = '';
       if (month === 1 && i >= 20 && i <= 26) {
         isExam = 'exam-date';
+      } else if (month === 3 && i >= 21 && i <= 30) {
+        isExam = 'exam-date';
       }
       html += `<div class="calendar-day ${isToday} ${isExam}">${i}</div>`;
     }
 
     html += `</div>`;
-    if (month === 1) {
+    if (month === 1 || month === 3) {
+      const examName = month === 1 ? 'Midsem' : 'Endsem';
+      const examDates = month === 1 ? 'Feb 20-26' : 'Apr 21-30';
       html += `
         <div class="calendar-info">
           <div class="exam-pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M7 17l9.2-9.2M17 17V7H7"/>
             </svg>
-            <span>Midsem: Feb 20-26</span>
+            <span>${examName}: ${examDates}</span>
           </div>
         </div>
       `;
