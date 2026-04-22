@@ -98,6 +98,7 @@ const examTypes = [
  * Format: { name: "Name", meta: "Paper Details" }
  */
 const recentSubmissions = [
+  { name: "Anonymous", meta: "Signals and Systems Mid Sem 2026" },
   { name: "Kavish Shri Vatsav", meta: "Basic Electronics Circuits Mid Sem 2026" },
   { name: "Anonymous", meta: "Operational Communication Mid Sem 2026" },
   { name: "Satyanarayana K", meta: "Computer Architecture Mid Sem 2026" },
@@ -230,7 +231,8 @@ const pdfCatalog = {
     "mid": [
       { "label": "2022", "path": "pyqdata/sem2/signals and systems/mid/2022.pdf" },
       { "label": "2023-1", "path": "pyqdata/sem2/signals and systems/mid/2023-1.pdf" },
-      { "label": "2023-2", "path": "pyqdata/sem2/signals and systems/mid/2023-2.pdf" }
+      { "label": "2023-2", "path": "pyqdata/sem2/signals and systems/mid/2023-2.pdf" },
+      { "label": "2026", "path": "pyqdata/sem2/signals and systems/mid/2026.pdf" }
     ],
     "end": [
       { "label": "2022", "path": "pyqdata/sem2/signals and systems/end/2022.pdf" }
