@@ -98,6 +98,9 @@ const examTypes = [
  * Format: { name: "Name", meta: "Paper Details" }
  */
 const recentSubmissions = [
+  { name: "Sai Akshaya", meta: "Signals and Systems Quiz 2026" },
+  { name: "Rakesh Varma", meta: "Probability and Statistics Quiz 2026" },
+  { name: "Naresh", meta: "Artificial Intelligence Quiz 2026" },
   { name: "Anonymous", meta: "Signals and Systems Mid Sem 2026" },
   { name: "Kavish Shri Vatsav", meta: "Basic Electronics Circuits Mid Sem 2026" },
   { name: "Anonymous", meta: "Operational Communication Mid Sem 2026" },
@@ -110,6 +113,7 @@ function renderSubmissions() {
   if (!container) return;
 
   container.innerHTML = recentSubmissions
+    .slice(0, 5)
     .map(sub => `
       <div class="submission-item">
         <svg class="contributor-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -213,7 +217,8 @@ const pdfCatalog = {
       { "label": "2023", "path": "pyqdata/sem2/probability and statistics/end/2023.pdf" }
     ],
     "quiz": [
-      { "label": "2026", "path": "pyqdata/sem2/probability and statistics/quiz/2026.pdf" }
+      { "label": "2026", "path": "pyqdata/sem2/probability and statistics/quiz/2026.pdf" },
+      { "label": "2026-2", "path": "pyqdata/sem2/probability and statistics/quiz/2026-2.pdf" }
     ]
   },
   "2|DSA": {
@@ -237,7 +242,9 @@ const pdfCatalog = {
     "end": [
       { "label": "2022", "path": "pyqdata/sem2/signals and systems/end/2022.pdf" }
     ],
-    "quiz": []
+    "quiz": [
+      { "label": "2026", "path": "pyqdata/sem2/signals and systems/quiz/2026.pdf" }
+    ]
   },
   "2|CA": {
     "mid": [
@@ -376,7 +383,8 @@ const pdfCatalog = {
     ],
     "quiz": [
       { "label": "2024-1", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-1.pdf" },
-      { "label": "2024-2", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-2.pdf" }
+      { "label": "2024-2", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2024-2.pdf" },
+      { "label": "2026", "path": "pyqdata/sem4/Artificial Intelligence /quiz/2026.pdf" }
     ]
   },
   "4|FFSD": {
