@@ -795,7 +795,10 @@ const attachEvents = () => {
     // Blur the button to remove hover state
     setTimeout(() => button.blur(), 50);
 
-    document.getElementById("browse").scrollIntoView({ behavior: "smooth" });
+    // Redirect to calculator
+    setTimeout(() => {
+      window.location.href = "calculator.html";
+    }, 150);
   });
 
   // Handle touch devices specifically to prevent hover state persistence

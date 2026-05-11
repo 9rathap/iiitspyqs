@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SGPA CALCULATOR</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --primary-accent: #000;
+      --glass-bg: rgba(255, 255, 255, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --card-radius: 32px;
+      --fluid-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.dark-mode {
+      --primary-accent: #fff;
+      --glass-bg: rgba(10, 10, 10, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.5s ease;
+    }
+
+    /* Ambient Background blobs */
+    .ambient-blobs {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
+      animation: float 20s infinite alternate;
+    }
+
+    .blob-1 {
+      background: #000;
+      top: -200px;
+      right: -100px;
+    }
+
+    .blob-2 {
+      background: #555;
+      bottom: -200px;
+      left: -100px;
+      animation-delay: -5s;
+    }
+
+    body.dark-mode .blob-1 {
+      background: #fff;
+    }
+
+    body.dark-mode .blob-2 {
+      background: #888;
+    }
+
+    @keyframes float {
+      from {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      to {
+        transform: translate(100px, 50px) rotate(30deg);
+      }
+    }
+
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(40px) saturate(150%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--card-radius);
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      background: var(--text);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 24px;
+    }
+
+    /* Branch Toggle */
+    .branch-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--tag-bg);
+      padding: 6px;
+      border-radius: 999px;
+      gap: 4px;
+    }
+
+    .branch-btn {
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.4s var(--fluid-ease);
+    }
+
+    .branch-btn.active {
+      background: var(--text);
+      color: var(--bg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Results Dashboard */
+    .result-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--tag-bg);
+      border: 1px solid var(--glass-border);
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, #121212 0%, #2c2c2c 100%);
+      border: none;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark-mode .stat-card.highlight {
+      background: linear-gradient(135deg, #f5f5f7 0%, #d2d2d7 100%);
+    }
+
+    .stat-card.highlight .stat-label {
+      color: #ffffff;
+      opacity: 0.6;
+    }
+
+    .stat-card.highlight .stat-value {
+      color: #ffffff;
+    }
+
+    body.dark-mode .stat-card.highlight .stat-label {
+      color: #000000;
+      opacity: 0.5;
+    }
+
+    body.dark-mode .stat-card.highlight .stat-value {
+      color: #000000;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .stat-value {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    /* Main Content Styling */
+    .content-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .semester-nav {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .semester-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sem-tab {
+      padding: 14px 28px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.4s var(--fluid-ease);
+      color: var(--text-secondary);
+      user-select: none;
+    }
+
+    .sem-tab.active {
+      background: var(--text);
+      color: var(--bg);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-group {
+      margin-bottom: 32px;
+      animation: slide-up 0.6s var(--fluid-ease) both;
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .category-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .category-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      opacity: 0.3;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .subject-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s var(--fluid-ease);
+    }
+
+    .subject-card:hover {
+      background: var(--bg);
+      border-color: var(--text);
+      transform: translateY(-4px);
+    }
+
+    .sub-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .sub-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .grade-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: 160px;
+      justify-content: flex-end;
+    }
+
+    .grade-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .grade-circle:hover {
+      background: var(--tag-bg);
+    }
+
+    .grade-circle.selected {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    /* Custom Course Styles */
+    .add-course-card {
+      background: var(--glass-bg) !important;
+      border: 1px solid var(--glass-border) !important;
+      padding: 24px !important;
+      transition: all 0.3s var(--fluid-ease);
+    }
+
+    .add-course-card:hover {
+      border-color: var(--text) !important;
+      background: var(--bg) !important;
+      transform: translateY(-4px);
+    }
+
+    .add-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--glass-border);
+      color: var(--text);
+      padding: 8px 4px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+      transition: border-color 0.3s ease;
+    }
+
+    .add-input:focus {
+      border-color: var(--text);
+    }
+
+    .add-input::placeholder {
+      opacity: 0.4;
+      font-weight: 500;
+    }
+
+    .branch-card { grid-area: branch; }
+    .result-card { grid-area: result; }
+    .download-card { grid-area: down; }
+    .content-panel { grid-area: main; }
+
+    /* Desktop Grid Layout */
+    .dashboard {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      grid-template-areas: 
+        "side main";
+      gap: 32px;
+      min-height: 100vh;
+    }
+
+    .side-panel {
+      grid-area: side;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: sticky;
+      top: 16px;
+      height: fit-content;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard {
+        display: flex;
+        flex-direction: column;
+        padding: 4px 8px;
+        gap: 0px !important;
+      }
+      .side-panel {
+        display: contents;
+      }
+      .branch-card {
+        order: 1;
+        margin-bottom: 12px;
+      }
+      .content-panel {
+        order: 2;
+        gap: 0px !important;
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+      }
+      .category-group {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+      }
+      .result-card {
+        order: 3;
+        margin-top: 0px !important;
+        text-align: center;
+      }
+      .stat-card.highlight {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .download-card {
+        order: 4;
+        margin-top: 12px;
+      }
+      .side-panel > p {
+        order: 5;
+      }
+      .stat-value {
+        font-size: 44px;
+        margin-top: 4px;
+      }
+      .glass-card {
+        padding: 16px 12px !important;
+      }
+      .subject-grid {
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .subject-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .grade-btn-group {
+        width: 100%;
+        max-width: 100%;
+        justify-content: flex-start;
+      }
+
+      .glass-card {
+        padding: 24px 20px;
+      }
+
+      .sem-tab {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+
+      .category-title {
+        font-size: 12px;
+        justify-content: center;
+        text-align: center;
+      }
+      .category-title::after {
+        display: none;
+      }
+      .stat-value {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="dashboard">
+    <aside class="side-panel">
+      <!-- Card 1: Branch Selection (Top on Mobile) -->
+      <div class="glass-card branch-card">
+        <div class="brand-header">
+          <h2 style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em;">Calculate SGPA</h2>
+        </div>
+        <div style="margin: 24px 0;">
+          <label class="stat-label">Academic Branch</label>
+          <div class="branch-selector" id="branchSelector">
+            <button class="branch-btn active" onclick="switchBranch('CSE')">CSE/AI</button>
+            <button class="branch-btn" onclick="switchBranch('ECE')">ECE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: SGPA Results (End of page on Mobile) -->
+      <div class="glass-card result-card">
+        <div class="result-stack">
+          <div class="stat-card highlight">
+            <label class="stat-label">Semester SGPA</label>
+            <div class="stat-value" id="currentSGPA">0.00</div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <button class="cta secondary" onclick="resetGrades()" style="width: 100%; padding: 16px;">Calculate Again</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Download Report Card (End of page on Mobile) -->
+      <div class="glass-card download-card" style="padding: 24px;">
+        <button class="cta" onclick="downloadReport()" style="width: 100%; border-radius: 16px; height: 50px; background: var(--text); color: var(--bg); font-weight: 800;">Download Report Card</button>
+      </div>
+
+      <p style="font-size: 10px; opacity: 0.4; text-align: center; font-weight: 500; line-height: 1.4; padding: 0 10px;">
+        This tool is an independent project and is not affiliated with, endorsed by, or issued by IIIT Sri City. Generated reports are for personal reference only.
+      </p>
+    </aside>
+
+    <main class="content-panel">
+      <nav class="semester-nav" id="semNav">
+        <!-- Semesters 1-4 -->
+      </nav>
+
+      <div id="subjectsContainer">
+        <!-- Subjects by category -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const CURRICULUM = {
+      CSE: {
+        1: {
+          "Institute Core": [
+            { code: "ICS101", name: "Computer Programming", credits: 4 },
+            { code: "IMA101", name: "Discrete Structures and Matrix Algebra", credits: 4 },
+            { code: "IEC101", name: "Overview of Computers Workshop", credits: 4 },
+            { code: "IEC102", name: "Digital Logic Design", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK101", name: "Essential English/Ethics in Everyday Life", credits: 2 },
+            { code: "SSH001", name: "Foundations in Human Values and Ethics", credits: 2 }]
+        },
+        2: {
+          "Institute Core": [
+            { code: "IMA102", name: "Probability and Statistics", credits: 4 },
+            { code: "ICS201", name: "Data Structures and Algorithms", credits: 4 },
+            { code: "IEC204", name: "Signals and Systems", credits: 4 }],
+          "Program Core": [
+            { code: "ICS103", name: "Computer Architecture", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK102", name: "Operational Communication", credits: 2 },
+            { code: "SSH-EEL", name: "Ethics in Everyday Life/ AIV", credits: 2 }]
+        },
+        3: {
+          "Institute Core": [
+            { code: "IMA103", name: "Real Analysis, Numerical Analysis and Calculus", credits: 4 },
+            { code: "ICS102", name: "Object Oriented Programming", credits: 4 }],
+          "Program Core": [
+            { code: "ICS202", name: "Advanced Data Structures and Algorithms", credits: 4 },
+            { code: "ICS203", name: "Operating Systems", credits: 4 },
+            { code: "ICS204", name: "Database Management Systems", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK201", name: "Professional Communication", credits: 2 }]
+        },
+        4: {
+          "Institute Core": [
+            { code: "IEC255", name: "Computer and Communication Networks", credits: 4 }],
+          "Program Core": [
+            { code: "ICS301", name: "Fundamentals of Full Stack Development", credits: 4 },
+            { code: "ICS400", name: "Theory of Computation", credits: 4 },
+            { code: "ICS341", name: "Artificial Intelligence", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK202", name: "Advanced Communication Skills", credits: 2 },
+            { code: "QIC101", name: "Quantum Information & Computing", credits: 2 }]
+        }
+      },
+      ECE: {
+        1: {
+          "Institute Core": [
+            { code: "ICS101", name: "Computer Programming", credits: 4 },
+            { code: "IMA101", name: "Discrete Structures and Matrix Algebra", credits: 4 },
+            { code: "IEC101", name: "Overview of Computers Workshop", credits: 4 },
+            { code: "IEC102", name: "Digital Logic Design", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK101", name: "Essential English/Ethics in Everyday Life", credits: 2 },
+            { code: "SSH001", name: "Foundations in Human Values and Ethics", credits: 2 }]
+        },
+        2: {
+          "Institute Core": [
+            { code: "IMA102", name: "Probability and Statistics", credits: 4 },
+            { code: "ICS201", name: "Data Structures and Algorithms", credits: 4 },
+            { code: "IEC204", name: "Signals and Systems", credits: 4 }],
+          "Program Core": [
+            { code: "IEC103", name: "Basic Electronics Circuits", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK102", name: "Operational Communication", credits: 2 },
+            { code: "SSH-EEL", name: "Ethics in Everyday Life/ AIV", credits: 2 }]
+        },
+        3: {
+          "Institute Core": [
+            { code: "IMA200", name: "Real Analysis, Numerical Analysis and Calculus", credits: 4 },
+            { code: "ICS102", name: "Object Oriented Programming", credits: 4 }],
+          "Program Core": [
+            { code: "IEC330", name: "Control Systems", credits: 4 },
+            { code: "IEC111", name: "Circuit and Network Analysis", credits: 4 },
+            { code: "IEC201", name: "Embedded Systems", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK201", name: "Professional Communication", credits: 2 }]
+        },
+        4: {
+          "Institute Core": [
+            { code: "IEC255", name: "Computer and Communication Networks", credits: 4 }],
+          "Program Core": [
+            { code: "IEC400", name: "Fundamentals of Communication", credits: 4 },
+            { code: "ICS400", name: "Theory of Computation", credits: 4 },
+            { code: "IEC202", name: "Analog Circuits", credits: 4 },
+            { code: "IEC301", name: "Electromagnetics and Transmission Lines", credits: 4 }],
+          "SSHAM": [
+            { code: "ISK202", name: "Advanced Communication Skills", credits: 2 },
+            { code: "QIC101", name: "Quantum Information & Computing", credits: 2 }]
+        }
+      }
+    };
+
+    const GRADES = { O: 10, A: 9, B: 8, C: 7, D: 6, P: 5, F: 0 };
+
+    let state = {
+      branch: 'CSE',
+      semester: 1,
+      grades: {}, // Format: { "CSE|1|ICS101": "O", ... }
+      custom: [] // Format: [{ branch, semester, category, name, credits, grade }]
+    };
+
+    // Load from local storage
+    const saved = localStorage.getItem('gradeboard_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Migrate old state if needed (old state didn't have custom)
+      state = { ...state, ...parsed };
+      if (!state.custom) state.custom = [];
+    }
+
+    function init() {
+      renderSemNav();
+      renderSubjects();
+      updateResults();
+      initTheme();
+    }
+
+    function switchBranch(b) {
+      state.branch = b;
+      document.querySelectorAll('.branch-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${b}'`));
+      });
+      renderSubjects();
+      updateResults();
+      save();
+    }
+
+    function switchSem(s) {
+      state.semester = s;
+      document.querySelectorAll('.sem-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.textContent.includes(s));
+      });
+      renderSubjects();
+      updateResults();
+      save();
+    }
+
+    function renderSemNav() {
+      const nav = document.getElementById('semNav');
+      nav.innerHTML = [1, 2, 3, 4].map(s =>
+        `<button class="sem-tab ${state.semester === s ? 'active' : ''}" onclick="switchSem(${s})">Semester ${s}</button>`
+      ).join('');
+    }
+
+    function renderSubjects() {
+      const container = document.getElementById('subjectsContainer');
+      const data = CURRICULUM[state.branch][state.semester];
+      container.innerHTML = '';
+
+      Object.entries(data).forEach(([cat, subs]) => {
+        const section = document.createElement('div');
+        section.className = 'category-group';
+        section.innerHTML = `<h3 class="category-title">${cat}</h3>`;
+
+        const grid = document.createElement('div');
+        grid.className = 'subject-grid';
+
+        // Render Fixed Subjects
+        subs.forEach(sub => {
+          const key = `${state.branch}|${state.semester}|${sub.code}`;
+          const currentGrade = state.grades[key] || '';
+          const card = createSubjectCard(sub.name, sub.code, sub.credits, key, currentGrade);
+          grid.appendChild(card);
+        });
+
+        // Render Custom Subjects for this category
+        state.custom.filter(c => c.branch === state.branch && c.semester === state.semester && c.category === cat)
+          .forEach((c, idx) => {
+            const card = createSubjectCard(c.name, 'Custom', c.credits, `custom-${cat}-${idx}`, c.grade, true, idx, cat);
+            grid.appendChild(card);
+          });
+
+        // Render "Add Course" Card
+        const addCard = document.createElement('div');
+        addCard.className = 'subject-card add-course-card';
+        const defaultCr = (cat === 'SSHAM') ? 2 : 4;
+        addCard.innerHTML = `
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+            <p style="font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.5; margin-bottom: 4px;">Add New ${cat}</p>
+            <input type="text" placeholder="Subject Name..." class="add-input" id="new-name-${cat}">
+            <button class="cta" onclick="addCustomCourse('${cat}', ${defaultCr})" style="padding: 10px 16px; font-size: 12px; margin-top: 8px;">Add with ${defaultCr} Credits</button>
+          </div>
+        `;
+        grid.appendChild(addCard);
+
+        section.appendChild(grid);
+        container.appendChild(section);
+      });
+    }
+
+    function createSubjectCard(name, code, credits, key, currentGrade, isCustom = false, idx = -1, cat = '') {
+      const card = document.createElement('div');
+      card.className = 'subject-card';
+      card.innerHTML = `
+        <div class="sub-info">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h4 style="margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3;">${name}</h4>
+            ${isCustom ? `<button onclick="removeCustomCourse('${cat}', ${idx})" style="background: none; border: none; color: #ff3b30; cursor: pointer; padding: 0; display: flex; opacity: 0.6;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>` : ''}
+          </div>
+          <p>${credits} Credits</p>
+        </div>
+        <div class="grade-btn-group">
+          ${Object.keys(GRADES).map(g => `
+            <button class="grade-circle ${currentGrade === g ? 'selected' : ''}" 
+                    onclick="${isCustom ? `setCustomGrade(${idx}, '${cat}', '${g}')` : `setGrade('${key}', '${g}')`}">${g}</button>
+          `).join('')}
+        </div>
+      `;
+      return card;
+    }
+
+    function addCustomCourse(cat, credits) {
+      const nameInput = document.getElementById(`new-name-${cat}`);
+      const name = nameInput.value.trim();
+
+      if (name) {
+        state.custom.push({
+          branch: state.branch,
+          semester: state.semester,
+          category: cat,
+          name: name,
+          credits: credits,
+          grade: ''
+        });
+        renderSubjects();
+        updateResults();
+        save();
+      }
+    }
+
+    function removeCustomCourse(cat, idx) {
+      // Find the actual index in global state.custom array
+      const globalIdx = state.custom.findIndex((c, i) =>
+        c.branch === state.branch && c.semester === state.semester && c.category === cat &&
+        state.custom.filter((_, j) => j < i && state.custom[j].branch === state.branch && state.custom[j].semester === state.semester && state.custom[j].category === cat).length === idx
+      );
+
+      if (globalIdx !== -1) {
+        state.custom.splice(globalIdx, 1);
+        renderSubjects();
+        updateResults();
+        save();
+      }
+    }
+
+    function setGrade(key, grade) {
+      if (state.grades[key] === grade) {
+        delete state.grades[key];
+      } else {
+        state.grades[key] = grade;
+      }
+      renderSubjects();
+      updateResults();
+      save();
+    }
+
+    function setCustomGrade(idx, cat, grade) {
+      // Find the actual element in global state.custom
+      const items = state.custom.filter(c => c.branch === state.branch && c.semester === state.semester && c.category === cat);
+      const target = items[idx];
+      if (target) {
+        target.grade = (target.grade === grade) ? '' : grade;
+        renderSubjects();
+        updateResults();
+        save();
+      }
+    }
+
+    function updateResults() {
+      let semPoints = 0, semCredits = 0;
+
+      // Fixed Subjects
+      const semData = CURRICULUM[state.branch][state.semester];
+      Object.values(semData).flat().forEach(sub => {
+        const key = `${state.branch}|${state.semester}|${sub.code}`;
+        const grade = state.grades[key];
+        if (grade) {
+          semCredits += sub.credits;
+          semPoints += (GRADES[grade] * sub.credits);
+        }
+      });
+
+      // Custom Subjects
+      state.custom.filter(c => c.branch === state.branch && c.semester === state.semester)
+        .forEach(c => {
+          if (c.grade) {
+            semCredits += c.credits;
+            semPoints += (GRADES[c.grade] * c.credits);
+          }
+        });
+
+      const sgpa = semCredits > 0 ? (semPoints / semCredits).toFixed(2) : "0.00";
+      document.getElementById('currentSGPA').textContent = sgpa;
+    }
+
+    function resetGrades() {
+      const prefix = `${state.branch}|${state.semester}|`;
+      Object.keys(state.grades).forEach(key => {
+        if (key.startsWith(prefix)) delete state.grades[key];
+      });
+      // Clear custom grades for this sem
+      state.custom.filter(c => c.branch === state.branch && c.semester === state.semester)
+        .forEach(c => c.grade = '');
+
+      renderSubjects();
+      updateResults();
+      save();
+      document.activeElement.blur();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function save() {
+      localStorage.setItem('gradeboard_state', JSON.stringify(state));
+    }
+
+    function downloadReport() {
+      const userName = prompt("Please enter your name for the report card:", "Student Name");
+      if (!userName) return; // Cancelled
+
+      const semData = CURRICULUM[state.branch][state.semester];
+      let semPoints = 0, semCredits = 0;
+      const tableRows = [];
+      Object.entries(semData).forEach(([cat, subs]) => {
+        subs.forEach(sub => {
+          const key = `${state.branch}|${state.semester}|${sub.code}`;
+          const grade = state.grades[key];
+          if (grade) {
+            semCredits += sub.credits;
+            semPoints += (GRADES[grade] * sub.credits);
+            tableRows.push(`
+              <tr>
+                <td style="padding: 12px; border: 1px solid #000;">${sub.name}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center;">${cat.replace(' Core', '')}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center;">${sub.credits}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center; font-weight: 800;">${grade}</td>
+              </tr>
+            `);
+          }
+        });
+      });
+
+      // Add Custom subjects
+      state.custom.filter(c => c.branch === state.branch && c.semester === state.semester)
+        .forEach(c => {
+          if (c.grade) {
+            semCredits += c.credits;
+            semPoints += (GRADES[c.grade] * c.credits);
+            tableRows.push(`
+              <tr>
+                <td style="padding: 12px; border: 1px solid #000;">${c.name}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center;">${c.category.replace(' Core', '')}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center;">${c.credits}</td>
+                <td style="padding: 12px; border: 1px solid #000; text-align: center; font-weight: 800;">${c.grade}</td>
+              </tr>
+            `);
+          }
+        });
+
+      if (semCredits === 0) {
+        alert("Please enter at least one grade for the current semester.");
+        return;
+      }
+
+      const currentSGPA = (semPoints / semCredits).toFixed(2);
+
+      let reportHTML = `
+        <div id="printArea" style="padding: 40px; font-family: 'Outfit', sans-serif; color: #000;">
+          <div style="border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 30px; text-align: center;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 800; text-transform: uppercase;">Semester Report</h1>
+            <p style="margin: 5px 0 0; font-weight: 600; opacity: 0.6;">Indian Institute of Information Technology, Sri City</p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-bottom: 40px; align-items: flex-start;">
+            <div style="text-align: left;">
+              <p style="margin: 0; font-weight: 700; font-size: 14px; text-transform: uppercase; color: #444;">Name : <span style="font-weight: 800; color: #000; text-transform: none;">${userName}</span></p>
+              <p style="margin: 4px 0; font-weight: 700; font-size: 14px; text-transform: uppercase; color: #444;">Branch : <span style="font-weight: 800; color: #000; text-transform: none;">${state.branch === 'CSE' ? 'CSE/AI' : 'ECE'}</span></p>
+              <p style="margin: 4px 0; font-weight: 700; font-size: 14px; text-transform: uppercase; color: #444;">Semester : <span style="font-weight: 800; color: #000; text-transform: none;">${state.semester}</span></p>
+            </div>
+            <div style="text-align: right;">
+              <p style="margin: 0; font-size: 12px; opacity: 0.5; font-weight: 600;">DATE OF ISSUE</p>
+              <p style="margin: 2px 0; font-size: 13px; font-weight: 800;">${new Date().toLocaleDateString()}</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 40px;">
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+              <thead>
+                <tr style="text-align: left; font-size: 11px; text-transform: uppercase; background: transparent; color: #000; letter-spacing: 0.1em;">
+                  <th style="padding: 12px; border: 1px solid #000;">Subject Name</th>
+                  <th style="padding: 12px; border: 1px solid #000; text-align: center;">Type</th>
+                  <th style="padding: 12px; border: 1px solid #000; text-align: center;">Credits</th>
+                  <th style="padding: 12px; border: 1px solid #000; text-align: center;">Grade</th>
+                </tr>
+              </thead>
+              <tbody>${tableRows.join('')}</tbody>
+            </table>
+          </div>
+
+          <div style="margin-top: 50px; padding: 25px; background: #f8f8f8; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 800; font-size: 18px;">Semester SGPA</span>
+            <span style="font-size: 32px; font-weight: 800;">${currentSGPA}</span>
+          </div>
+
+          <p style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+            DISCLAIMER: This report is generated by an independent student tool and is NOT an official transcript issued by IIIT Sri City. 
+            It is not affiliated with or endorsed by the institute.
+          </p>
+        </div>
+      `;
+
+      const printFrame = document.createElement('iframe');
+      printFrame.style.display = 'none';
+      document.body.appendChild(printFrame);
+      printFrame.contentDocument.write(`
+        <html>
+          <head>
+            <title>${userName} - ${state.semester} sem report</title>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+            <style>
+              @page { margin: 15mm; }
+              body { margin: 0; font-family: 'Inter', sans-serif; color: #000; }
+              div#printArea { font-family: 'Inter', sans-serif; }
+              h1 { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: -0.04em; }
+            </style>
+          </head>
+          <body>${reportHTML}</body>
+        </html>
+      `);
+      printFrame.contentDocument.close();
+
+      setTimeout(() => {
+        const oldTitle = document.title;
+        document.title = `${userName} - ${state.semester} sem report`;
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+        document.title = oldTitle;
+        document.body.removeChild(printFrame);
+      }, 500);
+    }
+
+    function initTheme() {
+      const body = document.body;
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      if (savedTheme === 'dark') body.classList.add('dark-mode');
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

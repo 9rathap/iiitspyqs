@@ -402,6 +402,29 @@ html.no-splash .site-container {
   border: 1px solid var(--border);
 }
 
+.calculator-link {
+  background: var(--tag-bg);
+  color: var(--text);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+}
+
+.calculator-link:hover {
+  background: var(--border);
+  transform: scale(1.05);
+}
+
+.calc-icon {
+  width: 20px;
+  height: 20px;
+}
+
 /* Only enable hover on devices with true hover capability */
 @media (hover: hover) and (pointer: fine) {
   .theme-toggle:hover {
