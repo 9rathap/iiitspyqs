@@ -40,6 +40,11 @@
       z-index: -1;
       overflow: hidden;
       pointer-events: none;
+      display: none;
+    }
+
+    body.dark-mode .ambient-blobs {
+      display: block;
     }
 
     .blob {
@@ -90,7 +95,7 @@
       border: 1px solid var(--glass-border);
       border-radius: var(--card-radius);
       padding: 32px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
     }
 
     .brand-header {
@@ -205,7 +210,7 @@
     .content-panel {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 40px;
     }
 
     .semester-nav {
@@ -293,13 +298,10 @@
       justify-content: space-between;
       align-items: center;
       transition: all 0.3s var(--fluid-ease);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
     }
 
-    .subject-card:hover {
-      background: var(--bg);
-      border-color: var(--text);
-      transform: translateY(-4px);
-    }
+
 
     .sub-info h4 {
       font-size: 16px;
@@ -454,7 +456,7 @@
       }
       .content-panel {
         order: 2;
-        gap: 0px !important;
+        gap: 24px !important;
         margin-bottom: 0px !important;
         padding-bottom: 0px !important;
       }
@@ -539,7 +541,7 @@
       <!-- Card 1: Branch Selection (Top on Mobile) -->
       <div class="glass-card branch-card">
         <div class="brand-header">
-          <h2 style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em;">Calculate SGPA</h2>
+          <h2 style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em;">Calculate SGPA</h2>
         </div>
         <div style="margin: 24px 0;">
           <label class="stat-label">Academic Branch</label>
@@ -568,7 +570,7 @@
         <button class="cta" onclick="downloadReport()" style="width: 100%; border-radius: 16px; height: 50px; background: var(--text); color: var(--bg); font-weight: 800;">Download Report Card</button>
       </div>
 
-      <p style="font-size: 10px; opacity: 0.4; text-align: center; font-weight: 500; line-height: 1.4; padding: 0 10px;">
+      <p style="font-size: 10px; opacity: 0.4; text-align: center; font-weight: 500; line-height: 1.4; padding: 0 10px; margin-top: 32px; margin-bottom: 24px;">
         This tool is an independent project and is not affiliated with, endorsed by, or issued by IIIT Sri City. Generated reports are for personal reference only.
       </p>
     </aside>
