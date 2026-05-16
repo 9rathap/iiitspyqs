@@ -94,8 +94,6 @@ const examTypes = [
 
 /**
  * RECENT SUBMISSIONS DATA
- * Add new manual submissions to this array.
- * Format: { name: "Name", meta: "Paper Details" }
  */
 const recentSubmissions = [
   { name: "Sai Akshaya", meta: "Signals and Systems Quiz 2026" },
