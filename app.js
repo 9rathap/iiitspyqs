@@ -993,3 +993,62 @@ if (savedSemester) {
 renderCards();
 renderSubmissions();
 attachEvents();
+
+async function initVisitorCounter() {
+  const todayCountEl = document.getElementById('todayCount');
+  const alltimeCountEl = document.getElementById('alltimeCount');
+  const statsContainer = document.getElementById('visitorStats');
+  if (!todayCountEl || !alltimeCountEl) return;
+
+  const namespace = 'iiits-pyqs';
+  const alltimeKey = 'alltime';
+  
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const date = String(now.getDate()).padStart(2, '0');
+  const todayKey = `today_${year}_${month}_${date}`;
+
+  const sessionVisitedKey = 'iiits-pyqs-visited-session';
+  const hasVisited = sessionStorage.getItem(sessionVisitedKey);
+
+  try {
+    let todayCount = 0;
+    let alltimeCount = 0;
+
+    if (!hasVisited) {
+      const [alltimeRes, todayRes] = await Promise.all([
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${alltimeKey}/up`).then(r => r.json()),
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}/up`).then(r => r.json())
+      ]);
+      
+      alltimeCount = alltimeRes.count || 0;
+      todayCount = todayRes.count || 0;
+      
+      sessionStorage.setItem(sessionVisitedKey, 'true');
+    } else {
+      const [alltimeRes, todayRes] = await Promise.all([
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${alltimeKey}/`).then(r => r.json()),
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}/`).then(r => r.json())
+      ]);
+
+      alltimeCount = alltimeRes.count || 0;
+      todayCount = (todayRes && todayRes.count) ? todayRes.count : 0;
+    }
+
+    todayCountEl.textContent = Number(todayCount).toLocaleString();
+    alltimeCountEl.textContent = Number(alltimeCount).toLocaleString();
+
+    if (statsContainer) {
+      statsContainer.style.opacity = '1';
+    }
+  } catch (err) {
+    console.error('Error fetching visitor stats:', err);
+    if (statsContainer) {
+      statsContainer.style.display = 'none';
+    }
+  }
+}
+
+initVisitorCounter();
+

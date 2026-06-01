@@ -481,6 +481,9 @@
       .side-panel > p {
         order: 5;
       }
+      .visitor-stats-container {
+        order: 4;
+      }
       .stat-value {
         font-size: 44px;
         margin-top: 4px;
@@ -568,6 +571,18 @@
       <!-- Card 3: Download Report Card (End of page on Mobile) -->
       <div class="glass-card download-card" style="padding: 24px;">
         <button class="cta" onclick="downloadReport()" style="width: 100%; border-radius: 16px; height: 50px; background: var(--text); color: var(--bg); font-weight: 800;">Download Report Card</button>
+      </div>
+
+      <div class="visitor-stats-container" style="display: flex; justify-content: center; margin-top: 16px;">
+        <div class="visitor-stats" id="visitorStats" style="opacity: 0;">
+          <span class="visitor-stat">
+            <span class="visitor-text">Total Visits Today: <strong id="todayCount">—</strong></span>
+          </span>
+          <span class="visitor-stat-separator">•</span>
+          <span class="visitor-stat">
+            <span class="visitor-text">Total Visits All Time: <strong id="alltimeCount">—</strong></span>
+          </span>
+        </div>
       </div>
 
       <p style="font-size: 10px; opacity: 0.4; text-align: center; font-weight: 500; line-height: 1.4; padding: 0 10px; margin-top: 32px; margin-bottom: 24px;">
@@ -1042,7 +1057,64 @@
       if (savedTheme === 'dark') body.classList.add('dark-mode');
     }
 
+    async function initVisitorCounter() {
+      const todayCountEl = document.getElementById('todayCount');
+      const alltimeCountEl = document.getElementById('alltimeCount');
+      const statsContainer = document.getElementById('visitorStats');
+      if (!todayCountEl || !alltimeCountEl) return;
+
+      const namespace = 'iiits-pyqs';
+      const alltimeKey = 'alltime';
+      
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      const todayKey = `today_${year}_${month}_${date}`;
+
+      const sessionVisitedKey = 'iiits-pyqs-visited-session';
+      const hasVisited = sessionStorage.getItem(sessionVisitedKey);
+
+      try {
+        let todayCount = 0;
+        let alltimeCount = 0;
+
+        if (!hasVisited) {
+          const [alltimeRes, todayRes] = await Promise.all([
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${alltimeKey}/up`).then(r => r.json()),
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}/up`).then(r => r.json())
+          ]);
+          
+          alltimeCount = alltimeRes.count || 0;
+          todayCount = todayRes.count || 0;
+          
+          sessionStorage.setItem(sessionVisitedKey, 'true');
+        } else {
+          const [alltimeRes, todayRes] = await Promise.all([
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${alltimeKey}/`).then(r => r.json()),
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}/`).then(r => r.json())
+          ]);
+
+          alltimeCount = alltimeRes.count || 0;
+          todayCount = (todayRes && todayRes.count) ? todayRes.count : 0;
+        }
+
+        todayCountEl.textContent = Number(todayCount).toLocaleString();
+        alltimeCountEl.textContent = Number(alltimeCount).toLocaleString();
+
+        if (statsContainer) {
+          statsContainer.style.opacity = '1';
+        }
+      } catch (err) {
+        console.error('Error fetching visitor stats:', err);
+        if (statsContainer) {
+          statsContainer.style.display = 'none';
+        }
+      }
+    }
+
     init();
+    initVisitorCounter();
   </script>
 </body>
 
