@@ -287,7 +287,8 @@ const pdfCatalog = {
     "quiz": [
       { "label": "2023", "path": "pyqdata/sem3/Real Analysis, Numerical Analysis and Calculus/quiz/2023.pdf" },
       { "label": "2025-1", "path": "pyqdata/sem3/Real Analysis, Numerical Analysis and Calculus/quiz/2025-1.pdf" },
-      { "label": "2025-2", "path": "pyqdata/sem3/Real Analysis, Numerical Analysis and Calculus/quiz/2025-2.pdf" }
+      { "label": "2025-2", "path": "pyqdata/sem3/Real Analysis, Numerical Analysis and Calculus/quiz/2025-2.pdf" },
+      { "label": "2026-1", "path": "pyqdata/sem3/Real Analysis, Numerical Analysis and Calculus/quiz/2026-1.pdf" }
     ]
   },
   "3|OOP": {
