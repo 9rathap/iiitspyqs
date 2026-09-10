@@ -1593,27 +1593,6 @@ main {
 
 }
 
-/* View Transitions API - Flashy Theme Toggle */
-::view-transition-group(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-  display: block;
-}
-
-/* Force the new view to be on top and clipped by the circle */
-body.transition-theme::view-transition-new(root) {
-  z-index: 10000;
-}
-
-body.transition-theme::view-transition-old(root) {
-  z-index: 1;
-}
 
 /* Ripple effect utility for toggle button */
 .ripple {

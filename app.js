@@ -914,6 +914,7 @@ const attachEvents = () => {
 
   function initTheme() {
     const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
     const body = document.body;
 
     const savedTheme = localStorage.getItem('theme');
@@ -923,47 +924,10 @@ const attachEvents = () => {
       body.classList.add('dark-mode');
     }
 
-    themeToggle.addEventListener('click', (e) => {
+    themeToggle.addEventListener('click', () => {
       const isDark = body.classList.contains('dark-mode');
       const nextTheme = isDark ? 'light' : 'dark';
-
-      // Fallback for browsers that don't support View Transitions
-      if (!document.startViewTransition) {
-        toggleTheme(nextTheme);
-        return;
-      }
-
-      // Flashy circular reveal transition
-      const x = e.clientX;
-      const y = e.clientY;
-      const endRadius = Math.hypot(
-        Math.max(x, innerWidth - x),
-        Math.max(y, innerHeight - y)
-      );
-
-      document.body.classList.add('transition-theme');
-
-      const transition = document.startViewTransition(() => {
-        toggleTheme(nextTheme);
-      });
-
-      transition.ready.then(() => {
-        document.documentElement.animate(
-          {
-            clipPath: [
-              `circle(0px at ${x}px ${y}px)`,
-              `circle(${endRadius}px at ${x}px ${y}px)`,
-            ],
-          },
-          {
-            duration: 500,
-            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            pseudoElement: '::view-transition-new(root)',
-          }
-        ).onfinish = () => {
-          document.body.classList.remove('transition-theme');
-        };
-      });
+      toggleTheme(nextTheme);
     });
 
     function toggleTheme(theme) {
